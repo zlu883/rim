@@ -4,32 +4,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ReactionLibrary {
+		
+	private static Map<String, Reaction> _reactions;
 	
-	private static ReactionLibrary INSTANCE;
-	
-	private Map<String, Reaction> _reactions;
-	
-	private ReactionLibrary() {
-		_reactions = new HashMap<String, Reaction>();
-	}
-	
-	public static ReactionLibrary getInstance() {
-		return INSTANCE;
-	}
+	private ReactionLibrary() {}
 	
 	public static void init() {
-		if (INSTANCE == null)
-			INSTANCE = new ReactionLibrary();
+		if (_reactions == null)
+			_reactions = new HashMap<String, Reaction>();
 	}
 	
-	public void register(Reaction r, String name) {
+	public static void register(Reaction r, String name) {
 		if (_reactions.containsKey(name)) {
 			//errorcheck
 		} else
 			_reactions.put(name, r);
 	} 
 	
-	public Reaction getReactionByName(String name) {
+	public static Reaction getReactionByName(String name) {
 		return _reactions.get(name);
 	}
 

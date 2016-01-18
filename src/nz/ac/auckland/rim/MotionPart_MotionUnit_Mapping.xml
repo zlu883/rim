@@ -1,0 +1,14 @@
+<MPMUmapping>
+	 <arms>
+	 	<armsBothRaise></armsBothRaise>
+	 	<armsBothDown></armsBothDown>
+	 </arms>
+	 <LED>
+	 	<LEDpattern1></LEDpattern1>
+	 	<LEDpattern2></LEDpattern2>
+	 </LED>
+	 <speech>
+	 	<speechSayHello></speechSayHello>
+	 	<speechSayWelldone></speechSayWelldone>
+	 </speech>
+</MPMUmapping>

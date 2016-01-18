@@ -1,5 +1,6 @@
 package nz.ac.auckland.rim.motion_modules;
 
+import nz.ac.auckland.rim.MotionUnit;
 import nz.ac.auckland.rim.RobotType;
 
 public class FuroiHomeMotionModule implements RobotMotionModule {
@@ -8,13 +9,27 @@ public class FuroiHomeMotionModule implements RobotMotionModule {
 	
 	private RobotType _robotType;
 	
-	private FuroiHomeMotionModule() {
-		
-	}
+	private FuroiHomeMotionModule() {}
 	
 	public static FuroiHomeMotionModule getInstance() {
 		if (INSTANCE == null)
 			INSTANCE = new FuroiHomeMotionModule();
 		return INSTANCE;
+	}
+
+	@Override
+	public void setRobotType(RobotType t) {
+		_robotType = t;
+	}
+
+	@Override
+	public RobotType getRobotType() {
+		return _robotType;
+	}
+
+	@Override
+	public void executeMotion(MotionUnit u) {
+		// TODO Auto-generated method stub
+		
 	}
 }

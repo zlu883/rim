@@ -1,6 +1,0 @@
-<robotTypes>
-	<robotType>FuroiHome</robotType>
-	<robotType>FuroiParrot</robotType>
-</robotTypes>
-
-<activeRobotType>FuroiHome</activeRobotType>

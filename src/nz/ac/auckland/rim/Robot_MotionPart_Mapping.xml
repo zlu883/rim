@@ -1,0 +1,11 @@
+<RMPmapping>
+	<FuroiHome>
+		<LED></LED>
+		<speech></speech>
+	</FuroiHome>
+	<FuroiParrot>
+		<LED></LED>
+		<speech></speech>
+		<arms></arms>
+	</FuroiParrot>
+</RMPmapping>
