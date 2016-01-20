@@ -1,0 +1,14 @@
+<MPMUmapping>
+	 <motionPart name="arms">
+	 	<motionUnit name="armsBothRaise"></motionUnit>
+	 	<motionUnit name="armsBothDown"></motionUnit>
+	 </motionPart>
+	 <motionPart name="LED">
+	 	<motionUnit name="LEDPatternA"></motionUnit>
+	 	<motionUnit name="LEDPatternB"></motionUnit>
+	 </motionPart>
+	 <motionPart name="speech">
+	 	<motionUnit name="speechSayHello"></motionUnit>
+	 	<motionUnit name="speechSayWelldone"></motionUnit>
+	 </motionPart>
+</MPMUmapping>

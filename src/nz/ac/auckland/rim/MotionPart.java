@@ -1,24 +1,29 @@
 package nz.ac.auckland.rim;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MotionPart {
 
-	private Map<String, MotionUnit> _motionUnits;
+	private String _name;
+	private List<MotionUnit> _motionUnits;
 	
-	public MotionPart() {
-		_motionUnits = new HashMap<String, MotionUnit>();
+	public MotionPart(String name) {
+		_motionUnits = new ArrayList<MotionUnit>();
+		_name = name;
 	}
 	
-	public void registerMotionUnit(MotionUnit u, String name) {
-		if (_motionUnits.containsKey(name)) {
-			//errorcheck
-		} else
-			_motionUnits.put(name, u);
+	public void registerMotionUnit(MotionUnit u) {
+		if (!_motionUnits.contains(u)) {
+			_motionUnits.add(u);
+		} else {
+			// non unique
+		}
 	} 
 	
-	public MotionUnit getMotionUnitByName(String name) {
-		return _motionUnits.get(name);
+	public String getName() {
+		return _name;
 	}
 }

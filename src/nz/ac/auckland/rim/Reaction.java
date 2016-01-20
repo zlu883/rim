@@ -5,10 +5,24 @@ import java.util.Map;
 
 public class Reaction {
 
-	private String name;
+	private String _name;
+	private Map<MotionUnit, Integer> _motionChanceMap;
 	
 	public Reaction(String reactionName) {
-		name = reactionName;
+		_name = reactionName;
+		_motionChanceMap = new HashMap<MotionUnit, Integer>();
+	}
+	
+	public String getName() {
+		return _name;
+	}
+	
+	public void registerMotionChance(MotionUnit u, int chance) {
+		_motionChanceMap.put(u, chance);
+	}
+	
+	public int getMotionChance(MotionUnit u) {
+		return _motionChanceMap.get(u);
 	}
 	
 }

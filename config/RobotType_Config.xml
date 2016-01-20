@@ -1,0 +1,16 @@
+<robotTypes>
+	
+	<robotType name="FuroiHome">
+		<motionPart name="LED"></motionPart>
+		<motionPart name="speech"></motionPart>
+	</robotType>
+	
+	<robotType name="FuroiParrot">
+		<motionPart name="LED"></motionPart>
+		<motionPart name="speech"></motionPart>
+		<motionPart name="arms"></motionPart>
+	</robotType>
+	
+	<activeRobotType name="FuroiHome"></activeRobotType>
+
+</robotTypes>
