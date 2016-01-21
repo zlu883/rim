@@ -2,6 +2,7 @@ package nz.ac.auckland.rim;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Reaction {
 
@@ -25,4 +26,7 @@ public class Reaction {
 		return _motionChanceMap.get(u);
 	}
 	
+	public Set<MotionUnit> getPossibleMotion() {
+		return _motionChanceMap.keySet();
+	}
 }

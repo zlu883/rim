@@ -16,6 +16,11 @@ public class ReactionGenerator {
 	
 	public static Reaction generateReaction(String scenarioName) {
 		
+		return singleReactionAlgorithm(scenarioName);
+	}
+	
+	private static Reaction singleReactionAlgorithm(String scenarioName) {
+		
 		ArrayList<Reaction> possibleReactions = new ArrayList<Reaction>();
 		ArrayList<Integer> reactionChances = new ArrayList<Integer>();
 		int chanceSum = 0;

@@ -11,6 +11,6 @@
 		<motionPart name="arms"></motionPart>
 	</robotType>
 	
-	<activeRobotType name="FuroiHome"></activeRobotType>
+	<activeRobotType name="FuroiParrot"></activeRobotType>
 
 </robotTypes>

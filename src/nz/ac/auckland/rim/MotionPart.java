@@ -26,4 +26,8 @@ public class MotionPart {
 	public String getName() {
 		return _name;
 	}
+	
+	public List<MotionUnit> getMotionUnits() {
+		return _motionUnits;
+	}
 }
