@@ -15,7 +15,7 @@ public class RIMMain {
 		RIMDataLibrary.getRobotType("FuroiHome").registerMotionModule(FuroiHomeMotionModule.getInstance());
 		RIMDataLibrary.getRobotType("FuroiParrot").registerMotionModule(FuroiParrotMotionModule.getInstance());
 		
-		System.out.println(RIMDataLibrary.getScenario("COPDstart").getReactionChance(RIMDataLibrary.getReaction("greet")));
+		for (int i = 0; i < 100; i++) {System.out.println(ReactionGenerator.generateReaction("MainMenu").getName());}
 	}
 	
 	public static void process(String scenario) {

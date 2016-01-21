@@ -2,6 +2,7 @@ package nz.ac.auckland.rim;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Scenario {
 
@@ -15,6 +16,10 @@ public class Scenario {
 	
 	public int getReactionChance(Reaction reaction) {
 		return _reactionChanceMap.get(reaction);
+	}
+	
+	public Set<Reaction> getPossibleReactions() {
+		return _reactionChanceMap.keySet();
 	}
 	
 	public String getName() {
