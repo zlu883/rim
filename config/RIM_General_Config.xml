@@ -1,0 +1,13 @@
+<!-- General configurations for RIM -->
+<generalConfig>
+
+	<!-- Port number for the RIM server which receives requests from application -->
+	<RIMserverPortNumber>33333</RIMserverPortNumber>
+	
+	<!-- Port number of the RM server which takes RIM output commands, depends on RM configuration -->
+	<RMserverPortNumber>10000</RMserverPortNumber>
+
+	<!-- The interaction generation scheme, either based on singleReaction or compositeReaction -->
+	<generationScheme>singleReaction</generationScheme>
+	
+</generalConfig>

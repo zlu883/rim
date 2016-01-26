@@ -85,12 +85,9 @@ public class RIMDataLibrary {
 				_activeRobotType = _robotTypes.get(robotTypeName);
 			} else {
 				// unregistered robot type
-				System.out.println("?????");
 			}
 		} else {
 			// not unique
-			System.out.println("??");
-
 		}
 		
 		// register reactions
