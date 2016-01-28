@@ -14,33 +14,99 @@ public class ReactionGenerator {
 	
 	private ReactionGenerator() {}
 	
-	public static Reaction generateReaction(String scenarioName) {
-		
-		return singleReactionAlgorithm(scenarioName);
+	public static enum AlgorithmType {SINGLE, VECTOR}
+	
+	private static AlgorithmType activeAlgorithm = AlgorithmType.SINGLE;
+	
+	public static void setAlgorithmType(AlgorithmType t) {
+		activeAlgorithm = t;
 	}
 	
-	private static Reaction singleReactionAlgorithm(String scenarioName) {
+	/**
+	 * The main reaction generation function.
+	 * 
+	 * @param scenarioName name of the triggering scenario
+	 * @return a map of the generated reaction(s) linked to their respective strength value
+	 */
+	public static Map<Reaction, Double> generateReaction(String scenarioName) {
+		
+		Scenario triggerScenario = RIMDataLibrary.getScenario(scenarioName);
+		
+		// Decide which algorithm to use depending on the configured active algorithm.
+		// Single is the default.
+		if (activeAlgorithm.equals(AlgorithmType.SINGLE)) {
+			return singleReactionAlgorithm(triggerScenario);
+		} else if (activeAlgorithm.equals(AlgorithmType.VECTOR)) {
+			return reactionVectorAlgorithm(triggerScenario);
+		} else {
+			return singleReactionAlgorithm(triggerScenario);
+		}
+	}
+	
+	/**
+	 * Generates a single reaction for the scenario by randomly selecting one from its list
+	 * of possible reactions, based on their chance factors.
+	 * 
+	 * @param triggerScenario the input scenario
+	 * @return map of a single reaction linked to a strength of 1
+	 */
+	private static Map<Reaction, Double> singleReactionAlgorithm(Scenario triggerScenario) {
 		
 		ArrayList<Reaction> possibleReactions = new ArrayList<Reaction>();
-		ArrayList<Integer> reactionChances = new ArrayList<Integer>();
+		ArrayList<Integer> cumulativeChances = new ArrayList<Integer>();
 		int chanceSum = 0;
-		Scenario s = RIMDataLibrary.getScenario(scenarioName);
-		for (Reaction r : s.getPossibleReactions()) {
+		
+		// Put the set of possible reactions for the scenario into a list.
+		// Put their chance factors cumulatively into a corresponding list.
+		for (Reaction r : triggerScenario.getPossibleReactions()) {
 			possibleReactions.add(r);
-			int chance = s.getReactionChance(r);
-			reactionChances.add(chance);
-			chanceSum += chance; 
+			chanceSum += triggerScenario.getReactionChance(r);
+			cumulativeChances.add(chanceSum);
 		}
+		
+		// Roll a random number between 1 and the sum of chances and see where it falls
+		// in the cumulative chance list. The corresponding reaction is chosen.
+		Reaction chosenReaction = null;
 		int rand = new Random().nextInt(chanceSum) + 1;
-		chanceSum = 0;
-		for (int i = 0; i < reactionChances.size(); i++) {
-			chanceSum += reactionChances.get(i);
-			if (rand <= chanceSum) {
-				return possibleReactions.get(i);
+		for (int i = 0; i < cumulativeChances.size(); i++) {
+			if (rand <= cumulativeChances.get(i)) {
+				chosenReaction = possibleReactions.get(i);
+				break;
 			}
 		}
 		
-		return null;
+		Map<Reaction, Double> generatedReaction = new HashMap<Reaction, Double>();
+		generatedReaction.put(chosenReaction, 1.0);
+		return generatedReaction;
+		
+	}
+	
+	/**
+	 * Generates a vector of reaction strengths calculated from their chance factor
+	 * for the given scenario. The strengths sum to 1. Returns the vector in the form
+	 * of a map.
+	 * 
+	 * @param scenario the input scenario
+	 * @return map of reactions linked to their respective strengths
+	 */
+	private static Map<Reaction, Double> reactionVectorAlgorithm(Scenario triggerScenario) {
+		
+		// Calculate the sum of the reaction chance factors for the scenario
+		int chanceSum = 0;
+		for (Reaction r : triggerScenario.getPossibleReactions()) {
+			chanceSum += triggerScenario.getReactionChance(r);
+		}
+		
+		// Create a copy of the reaction-chance mapping, and convert each chance factor 
+		// to a strength value out of 1 by diving the factor by the sum
+		Map<Reaction, Double> reactionVector = new HashMap<Reaction, Double>();
+		for (Reaction r : triggerScenario.getPossibleReactions()) {
+			Double strength = (double)triggerScenario.getReactionChance(r)/(double)chanceSum;
+			reactionVector.put(r, strength);
+		}
+		
+		return reactionVector;
+		
 	}
 	
 }

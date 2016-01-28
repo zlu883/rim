@@ -34,6 +34,7 @@ public class RIMDataLibrary {
 		Document MPMUMapping = XmlParser.parseToDocument("config/MotionPart_MotionUnit_Mapping.xml");
 		Document RMMapping = XmlParser.parseToDocument("config/Reaction_Motion_Mapping.xml");
 		Document RTConfig = XmlParser.parseToDocument("config/RobotType_Config.xml");
+		Document RIMConfig = XmlParser.parseToDocument("config/RIM_General_Config.xml");
 
 		// register motion units
 		_motionUnits = new HashMap<String, MotionUnit>();
@@ -126,7 +127,10 @@ public class RIMDataLibrary {
 							(Integer.parseInt(((Element) reactions.item(j)).getAttribute("chance"))));
 				}
 			}
-		}				
+		}
+		
+		// read general config
+		RIMConfig.getElementsByTagName(arg0)
 	}
 				
 	public static RobotType getRobotType(String name) {

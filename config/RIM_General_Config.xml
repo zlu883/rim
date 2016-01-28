@@ -4,10 +4,10 @@
 	<!-- Port number for the RIM server which receives requests from application -->
 	<RIMserverPortNumber>33333</RIMserverPortNumber>
 	
-	<!-- Port number of the RM server which takes RIM output commands, depends on RM configuration -->
-	<RMserverPortNumber>10000</RMserverPortNumber>
+	<!-- IP address and port of the RM server which takes RIM output commands, depends on RM configuration -->
+	<RMserverAddress>ws://localhost:10000</RMserverAddress>
 
-	<!-- The interaction generation scheme, either based on singleReaction or compositeReaction -->
-	<generationScheme>singleReaction</generationScheme>
+	<!-- The interaction generation scheme, either SINGLE or VECTOR -->
+	<generationScheme>VECTOR</generationScheme>
 	
 </generalConfig>

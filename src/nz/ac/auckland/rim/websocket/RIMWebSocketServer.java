@@ -1,4 +1,4 @@
-package nz.ac.auckland.rim;
+package nz.ac.auckland.rim.websocket;
 
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
