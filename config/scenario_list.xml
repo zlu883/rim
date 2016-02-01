@@ -1,0 +1,7 @@
+<!-- Register all application scenarios here -->
+
+<scenarioList>
+
+	<scenario name="mainMenu"></scenario>
+
+</scenarioList>

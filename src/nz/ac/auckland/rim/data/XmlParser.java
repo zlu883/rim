@@ -1,4 +1,4 @@
-package nz.ac.auckland.rim;
+package nz.ac.auckland.rim.data;
 
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;

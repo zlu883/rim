@@ -1,0 +1,13 @@
+<!-- Register all possible robot reactions here -->
+
+<reactionList>
+
+	<reaction name="greet"></reaction>
+	<reaction name="busy"></reaction>
+	<reaction name="wait"></reaction>
+	<reaction name="sleep"></reaction>
+	<reaction name="compliment"></reaction>
+	<reaction name="complain"></reaction>
+	<reaction name="dance"></reaction>
+	
+</reactionList>

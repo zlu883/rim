@@ -4,6 +4,8 @@ public class RIMException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	
-	public static enum Error {W}
-
+	public RIMException(String cause) {
+		super(cause);
+	}
+	
 }

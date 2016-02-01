@@ -10,6 +10,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import nz.ac.auckland.rim.data.RIMDataLibrary;
+import nz.ac.auckland.rim.data.Reaction;
+import nz.ac.auckland.rim.data.Scenario;
+
 public class ReactionGenerator {
 	
 	private ReactionGenerator() {}

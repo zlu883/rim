@@ -1,0 +1,12 @@
+<!-- Register all robot types here -->
+
+<robotTypes>
+	
+	<robotType name="FuroiHome"></robotType>	
+	<robotType name="FuroiParrot"></robotType>
+	
+	<!-- Register the robot type that is running the application here. There
+	must be only one and it must be registered above -->  
+	<activeRobotType name="FuroiParrot"></activeRobotType>
+
+</robotTypes>

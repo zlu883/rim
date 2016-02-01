@@ -1,0 +1,31 @@
+<!-- Register all motion parts and their respective motion units here -->
+
+<!-- Motion parts are distinct motion output components on a robot. Motion
+units are mutually exclusive motions where only one can be executed under
+each motion part at one time. All motion units should be unique across 
+all motion parts. -->
+
+<motionPartAndMotionUnitList>
+
+	 <motionPart name="arms">
+	 	<motionUnit name="armsBothSwing"></motionUnit>
+	 	<motionUnit name="armsBothRaise"></motionUnit>
+	 	<motionUnit name="armsBothDrop"></motionUnit>
+	 </motionPart>
+	 <motionPart name="LED">
+	 	<motionUnit name="showHappiness"></motionUnit>
+	 	<motionUnit name="showSadness"></motionUnit>
+	 	<motionUnit name="showAlert"></motionUnit>
+	 	<motionUnit name="showFastProcessing"></motionUnit>
+	 	<motionUnit name="showSlowProcessing"></motionUnit>
+	 </motionPart>
+	 <motionPart name="speech">
+	 	<motionUnit name="speechSayHello"></motionUnit>
+	 	<motionUnit name="speechSayGoodWork"></motionUnit>
+	 	<motionUnit name="speechSayCanDoBetter"></motionUnit>
+	 	<motionUnit name="speechSayReady"></motionUnit>
+	 	<motionUnit name="speechSayBusy"></motionUnit>
+	 	<motionUnit name="speechSayPleaseWait"></motionUnit>
+	 </motionPart>
+	 
+</motionPartAndMotionUnitList>

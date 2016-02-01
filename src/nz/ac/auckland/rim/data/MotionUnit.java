@@ -1,4 +1,4 @@
-package nz.ac.auckland.rim;
+package nz.ac.auckland.rim.data;
 
 public class MotionUnit {
 

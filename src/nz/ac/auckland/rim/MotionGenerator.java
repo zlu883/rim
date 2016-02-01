@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import nz.ac.auckland.rim.data.MotionPart;
+import nz.ac.auckland.rim.data.MotionUnit;
+import nz.ac.auckland.rim.data.RIMDataLibrary;
+import nz.ac.auckland.rim.data.Reaction;
+
 public class MotionGenerator {
 
 	private MotionGenerator() {}

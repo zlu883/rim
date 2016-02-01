@@ -1,0 +1,14 @@
+<!-- Register the reactions each motion unit may be trigggered under. The strength
+value specifies how much it reflects the given reaction (weighted against the sum
+of all strengths). -->
+
+<!-- All reactions must be registered in reaction_list.xml -->
+<!-- All motion units must be registered in motion_part_and_motion_unit_list.xml -->
+
+<motionUnitToReactionMapping>
+
+	<motionUnit name="armsBothSwing">
+		<reaction name="busy" strength="1"></reaction>
+	</motionUnit>
+	
+</motionUnitToReactionMapping>

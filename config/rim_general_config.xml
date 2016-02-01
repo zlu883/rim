@@ -1,7 +1,7 @@
 <!-- General configurations for RIM -->
 <generalConfig>
 
-	<!-- Port number for the RIM server which receives requests from application -->
+	<!-- Port number of the RIM server which receives requests from application -->
 	<RIMserverPortNumber>33333</RIMserverPortNumber>
 	
 	<!-- IP address and port of the RM server which takes RIM output commands, depends on RM configuration -->

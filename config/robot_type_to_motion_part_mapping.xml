@@ -1,5 +1,9 @@
-<robotTypes>
-	
+<!-- Register any motion parts that you wish to associate with each robot type. -->
+<!-- All robot types must be registered in robot_type_list.xml. -->
+<!-- All motion parts must be registered in motion_part_list.xml. -->
+
+<robotTypeToMotionPartMapping>
+
 	<robotType name="FuroiHome">
 		<motionPart name="LED"></motionPart>
 		<motionPart name="speech"></motionPart>
@@ -10,7 +14,5 @@
 		<motionPart name="speech"></motionPart>
 		<motionPart name="arms"></motionPart>
 	</robotType>
-	
-	<activeRobotType name="FuroiParrot"></activeRobotType>
 
-</robotTypes>
+</robotTypeToMotionPartMapping>

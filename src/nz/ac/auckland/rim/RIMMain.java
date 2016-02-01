@@ -4,6 +4,7 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import nz.ac.auckland.rim.data.RIMDataLibrary;
 import nz.ac.auckland.rim.motion_modules.FuroiHomeMotionModule;
 import nz.ac.auckland.rim.motion_modules.FuroiParrotMotionModule;
 import nz.ac.auckland.rim.websocket.WebSocketManager;

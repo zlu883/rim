@@ -1,4 +1,4 @@
-package nz.ac.auckland.rim;
+package nz.ac.auckland.rim.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
