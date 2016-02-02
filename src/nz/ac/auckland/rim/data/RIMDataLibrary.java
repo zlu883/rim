@@ -1,6 +1,7 @@
 package nz.ac.auckland.rim.data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +81,23 @@ public class RIMDataLibrary {
 			_motionUnits.add(new MotionUnit(motionUnitName));
 		}
 		
+		// register two-way relationships between motion parts and their corresponding motion units
+		for (int i = 0; i < motionPartListNodes.getLength(); i++) {
+			Element motionPartNode = (Element)motionPartListNodes.item(i);
+			String motionPartName = motionPartNode.getAttribute("name");
+			MotionPart p = getMotionPart(motionPartName);
+			NodeList motionUnitNodes = motionPartNode.getChildNodes();
+			for (int j = 0; j < motionUnitNodes.getLength(); j++) {
+				Element motionUnitNode = (Element)motionUnitNodes.item(j);
+				if (motionUnitNode.getTagName().equals("motionUnit")) {
+					String motionUnitName = motionUnitNode.getAttribute("name");
+					MotionUnit u = getMotionUnit(motionUnitName);
+					p.registerMotionUnit(u);
+					u.registerActuator(p);
+				}
+			}
+		}
+		
 		// register robot types
 		_robotTypes = new ArrayList<RobotType>();
 		Document robotTypeListDoc = XmlParser.parseToDocument("config/robotType_list.xml");
@@ -98,15 +116,77 @@ public class RIMDataLibrary {
 			throw new RIMException("No or more than one active robot type found");
 		}
 		
+		// register robot type to motion part mapping
+		Document robotTypeMotionPartMappingDoc = XmlParser.parseToDocument("config/robot_type_to_motion_part_mapping.xml");
+		NodeList mappedRobotTypeNodes = robotTypeMotionPartMappingDoc.getElementsByTagName("robotType");
+		for (int i = 0; i < mappedRobotTypeNodes.getLength(); i++) {
+			Element mappedRobotTypeNode = (Element)mappedRobotTypeNodes.item(i);
+			String robotTypeName = mappedRobotTypeNode.getAttribute("name");
+			RobotType t = getRobotType(robotTypeName);
+			NodeList mappedMotionPartNodes = mappedRobotTypeNode.getChildNodes();
+			for (int j = 0; j < mappedMotionPartNodes.getLength(); j++) {
+				Element mappedMotionPartNode = (Element)mappedMotionPartNodes.item(j);
+				if (mappedMotionPartNode.getTagName().equals("motionPart")) {
+					String motionPartName = mappedMotionPartNode.getAttribute("name");
+					MotionPart p = getMotionPart(motionPartName);
+					t.registerMotionPart(p);
+				}
+			}
+		}
+	
 		// register scenario to reaction chance mapping
 		Document scenarioReactionMappingDoc = XmlParser.parseToDocument("config/scenario_to_reaction_mapping.xml");
+		_scenarioToReactionMapping = new int[_scenarios.size()][_reactions.size()]; // all values default to 0
+		NodeList mappedScenarioNodes = scenarioReactionMappingDoc.getElementsByTagName("scenario");
+		// loop through each scenario and each of their mapped reaction chances
+		for (int i = 0; i < mappedScenarioNodes.getLength(); i++) {
+			String scenarioName = ((Element)mappedScenarioNodes.item(i)).getAttribute("name");
+			Scenario mappedScenario = getScenario(scenarioName);
+			NodeList mappedReactionNodes = mappedScenarioNodes.item(i).getChildNodes();
+			for (int j = 0; j < mappedReactionNodes.getLength(); j++) {
+				Element mappedReactionNode = ((Element)mappedReactionNodes.item(j));
+				if (mappedReactionNode.getTagName().equals("reaction")) {
+					String reactionName = mappedReactionNode.getAttribute("name");
+					Reaction mappedReaction = getReaction(reactionName);
+					int reactionChance = Integer.parseInt(mappedReactionNode.getAttribute("chance"));
+					/* put the chance value in the mapping matrix, its position in respect to
+					 * the indices of the scenario and reaction lists */
+					int scenarioId = _scenarios.indexOf(mappedScenario);
+					int reactionId = _reactions.indexOf(mappedReaction);
+					_scenarioToReactionMapping[scenarioId][reactionId] = reactionChance;
+				}
+			}
+		}
 		
-		
+		// register motion unit to reaction strength mapping
+		Document motionUnitReactionMappingDoc = XmlParser.parseToDocument("config/motion_unit_to_reaction_mapping.xml");
+		_motionUnitToReactionMapping = new int[_motionUnits.size()][_reactions.size()]; // all values default to 0
+		NodeList mappedMotionUnitNodes = motionUnitReactionMappingDoc.getElementsByTagName("motionUnit");
+		// loop through each motion unit and each of their mapped reaction strengths
+		for (int i = 0; i < mappedMotionUnitNodes.getLength(); i++) {
+			String motionUnitName = ((Element) mappedMotionUnitNodes.item(i)).getAttribute("name");
+			MotionUnit mappedMotionUnit = getMotionUnit(motionUnitName);
+			NodeList mappedReactionNodes = mappedMotionUnitNodes.item(i).getChildNodes();
+			for (int j = 0; j < mappedReactionNodes.getLength(); j++) {
+				Element mappedReactionNode = ((Element)mappedReactionNodes.item(j));
+				if (mappedReactionNode.getTagName().equals("reaction")) {
+					String reactionName = mappedReactionNode.getAttribute("name");
+					Reaction mappedReaction = getReaction(reactionName);
+					int reactionStrength = Integer.parseInt(mappedReactionNode.getAttribute("strength"));
+					int motionUnitId = _motionUnits.indexOf(mappedMotionUnit);
+					int reactionId = _reactions.indexOf(mappedReaction);
+					_motionUnitToReactionMapping[motionUnitId][reactionId] = reactionStrength;
+				}
+			}
+		}
 	}
 	
-	// Getter methods for retrieving various data objects using their name.
+	// Getter methods for retrieving various data objects.
 				
 	public static RobotType getRobotType(String name) {
+		if (_robotTypes == null) {
+			throw new RIMException("RIM data library not initialized");
+		}
 		for (RobotType t : _robotTypes) {
 			if (t.getName().equals(name)) {
 				return t;
@@ -116,6 +196,9 @@ public class RIMDataLibrary {
 	}
 	
 	public static MotionPart getMotionPart(String name) {
+		if (_motionParts == null) {
+			throw new RIMException("RIM data library not initialized");
+		}
 		for (MotionPart p : _motionParts) {
 			if (p.getName().equals(name)) {
 				return p;
@@ -125,6 +208,9 @@ public class RIMDataLibrary {
 	}
 	
 	public static MotionUnit getMotionUnit(String name) {
+		if (_motionUnits == null) {
+			throw new RIMException("RIM data library not initialized");
+		}
 		for (MotionUnit u : _motionUnits) {
 			if (u.getName().equals(name)) {
 				return u;
@@ -134,6 +220,9 @@ public class RIMDataLibrary {
 	}
 	
 	public static Reaction getReaction(String name) {
+		if (_reactions == null) {
+			throw new RIMException("RIM data library not initialized");
+		}
 		for (Reaction r : _reactions) {
 			if (r.getName().equals(name)) {
 				return r;
@@ -143,6 +232,9 @@ public class RIMDataLibrary {
 	}
 	
 	public static Scenario getScenario(String name) {
+		if (_scenarios == null) {
+			throw new RIMException("RIM data library not initialized");
+		}
 		for (Scenario s : _scenarios) {
 			if (s.getName().equals(name)) {
 				return s;
@@ -156,6 +248,66 @@ public class RIMDataLibrary {
 			throw new RIMException("Active robot type not registered");
 		}
 		return _activeRobotType;
+	}
+	
+	// Getter methods for the lists of data objects. Always returns a clone of the stored list.
+	
+	public static List<Scenario> getScenarioList() {
+		List<Scenario> listToReturn = new ArrayList<Scenario>();
+		listToReturn.addAll(_scenarios);
+		return listToReturn;
+	}
+	
+	public static List<Reaction> getReactionList() {
+		List<Reaction> listToReturn = new ArrayList<Reaction>();
+		listToReturn.addAll(_reactions);
+		return listToReturn;
+	}
+	
+	public static List<MotionPart> getMotionPartList() {
+		List<MotionPart> listToReturn = new ArrayList<MotionPart>();
+		listToReturn.addAll(_motionParts);
+		return listToReturn;
+	}
+	
+	public static List<MotionUnit> getMotionUnitList() {
+		List<MotionUnit> listToReturn = new ArrayList<MotionUnit>();
+		listToReturn.addAll(_motionUnits);
+		return listToReturn;
+	}
+	
+	public static List<RobotType> getRobotTypeList() {
+		List<RobotType> listToReturn = new ArrayList<RobotType>();
+		listToReturn.addAll(_robotTypes);
+		return listToReturn;
+	}
+	
+	/**
+	 * Retrieves the reaction chance vector for a scenario (the corresponding
+	 * row in the scenario-reaction mapping matrix). Always return a clone
+	 * of the vector.
+	 * @param s the scenario
+	 * @return a vector of chance values, each corresponding to the reaction
+	 * at the same position in the reaction list
+	 */
+	public  static int[] getReactionChanceVector(Scenario s) {
+		int scenarioId = _scenarios.indexOf(s);
+		int[] chanceVector = _scenarioToReactionMapping[scenarioId];
+		return Arrays.copyOf(chanceVector, chanceVector.length);
+	}
+	
+	/**
+	 * Retrieves the reaction strength vector for a motion unit (the corresponding
+	 * row in the motion unit-reaction mapping matrix). Always return a clone
+	 * of the vector.
+	 * @param u the motion unit
+	 * @return a vector of strength values, each corresponding to the reaction
+	 * at the same position in the reaction list
+	 */
+	public static int[] getReactionStrengthVector(MotionUnit u) {
+		int motionUnitId = _motionUnits.indexOf(u);
+		int[] strengthVector =  _motionUnitToReactionMapping[motionUnitId];
+		return Arrays.copyOf(strengthVector, strengthVector.length);
 	}
 	
 }
