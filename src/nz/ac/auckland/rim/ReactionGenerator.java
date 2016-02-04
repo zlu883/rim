@@ -24,9 +24,9 @@ public class ReactionGenerator {
 	
 	private ReactionGenerator() {}
 	
-	public static enum AlgorithmType {SINGLE, COMPOSITE}
+	public static enum AlgorithmType {RANDOM, WEIGHTED}
 	
-	private static AlgorithmType activeAlgorithm = AlgorithmType.SINGLE;
+	private static AlgorithmType activeAlgorithm = AlgorithmType.WEIGHTED;
 	
 	public static void setAlgorithmType(AlgorithmType t) {
 		activeAlgorithm = t;
@@ -38,18 +38,18 @@ public class ReactionGenerator {
 	 * @param scenarioName name of the triggering scenario
 	 * @return a map of the selected reaction(s) linked to their respective strength value
 	 */
-	public static Map<Reaction, Double> generateReaction(String scenarioName) {
+	public static ReactionVector generateReaction(String scenarioName) {
 		
 		Scenario triggerScenario = RIMDataLibrary.getScenario(scenarioName);
 		
 		// Decide which algorithm to use depending on the configured active algorithm.
 		// Single is the default.
-		if (activeAlgorithm.equals(AlgorithmType.SINGLE)) {
-			return singleReactionAlgorithm(triggerScenario);
-		} else if (activeAlgorithm.equals(AlgorithmType.COMPOSITE)) {
-			return compositeReactionAlgorithm(triggerScenario);
+		if (activeAlgorithm.equals(AlgorithmType.RANDOM)) {
+			return randomSelectionAlgorithm(triggerScenario);
+		} else if (activeAlgorithm.equals(AlgorithmType.WEIGHTED)) {
+			return weightedVectorAlgorithm(triggerScenario);
 		} else {
-			return singleReactionAlgorithm(triggerScenario);
+			return weightedVectorAlgorithm(triggerScenario);
 		}
 	}
 	
@@ -58,9 +58,9 @@ public class ReactionGenerator {
 	 * of possible reactions, based on their chance values.
 	 * 
 	 * @param triggerScenario the input scenario
-	 * @return map of a single reaction linked to a strength of 1
+	 * @return vector of a single reaction with a strength of 10
 	 */
-	private static Map<Reaction, Double> singleReactionAlgorithm(Scenario triggerScenario) {
+	private static ReactionVector randomSelectionAlgorithm(Scenario triggerScenario) {
 		
 		List<Reaction> reactionList = RIMDataLibrary.getReactionList();
 		int[] reactionChanceVector = RIMDataLibrary.getReactionChanceVector(triggerScenario);
@@ -87,43 +87,34 @@ public class ReactionGenerator {
 			}
 		}
 		
-		Map<Reaction, Double> generatedReaction = new HashMap<Reaction, Double>();
-		generatedReaction.put(chosenReaction, 1.0);
-		return generatedReaction;
+		List<Reaction> chosenReactions = new ArrayList<Reaction>();
+		chosenReactions.add(chosenReaction);
+		List<Double> reactionWeights = new ArrayList<Double>();
+		reactionWeights.add(10.0);
+		return new ReactionVector(chosenReactions, reactionWeights);
 		
 	}
 	
 	/**
-	 * Generates a vector of multiple reactions with their strength value calculated from their 
-	 * chance value for the given scenario. The strengths sum to 1.
+	 * Returns a vector of multiple reactions with their strength value equivalent to their 
+	 * chance value for the given scenario.
 	 * 
 	 * @param scenario the input scenario
-	 * @return map of reactions linked to their respective strengths (possible reactions only)
+	 * @return vector of reactions with their respective strengths
 	 */
-	private static Map<Reaction, Double> compositeReactionAlgorithm(Scenario triggerScenario) {
+	private static ReactionVector weightedVectorAlgorithm(Scenario triggerScenario) {
 		
 		List<Reaction> reactionList = RIMDataLibrary.getReactionList();
 		int[] reactionChanceVector = RIMDataLibrary.getReactionChanceVector(triggerScenario);
 		
-		// Calculate the sum of the chance values in the reaction chance vector.
-		int chanceSum = 0;
+		List<Double> reactionWeights = new ArrayList<Double>();
+		
 		for (int i = 0; i < reactionChanceVector.length; i++) {
-			if (reactionChanceVector[i] > 0) { // ignore all reactions with 0 chance
-				chanceSum += reactionChanceVector[i];
-			}
+			Double strength = (double)reactionChanceVector[i];
+			reactionWeights.add(strength);
 		}
 		
-		Map<Reaction, Double> reactionStrengthVector = new HashMap<Reaction, Double>();
-		
-		// Convert each chance value to a strength value out of 1 by diving it by the sum
-		for (int i = 0; i < reactionChanceVector.length; i++) {
-			if (reactionChanceVector[i] > 0) { // ignore all reactions with 0 chance
-				Double strength = (double)reactionChanceVector[i]/(double)chanceSum;
-				reactionStrengthVector.put(reactionList.get(i), strength);
-			}
-		}
-		
-		return reactionStrengthVector;
+		return new ReactionVector(reactionList, reactionWeights);
 		
 	}
 	

@@ -22,9 +22,9 @@ public class MotionGenerator {
 
 	private MotionGenerator() {}
 	
-	public static enum AlgorithmType {SINGLE, COMPOSITE}
+	public static enum AlgorithmType {RANDOM, WEIGHTED}
 	
-	private static AlgorithmType activeAlgorithm = AlgorithmType.SINGLE;
+	private static AlgorithmType activeAlgorithm = AlgorithmType.WEIGHTED;
 	
 	public static void setAlgorithmType(AlgorithmType t) {
 		activeAlgorithm = t;
@@ -37,52 +37,77 @@ public class MotionGenerator {
 	 * strength value 
 	 * @return a list of the selected motion unit(s)
 	 */
-	public static List<MotionUnit> generateMotion(Map<Reaction, Integer> reactionStrengthVector) {
+	public static List<MotionUnit> generateMotion(ReactionVector v) {
 				
 		// Decide which algorithm to use depending on the configured active algorithm.
 		// Single is the default.
-		if (activeAlgorithm.equals(AlgorithmType.SINGLE)) {
-			return singleReactionAlgorithm(reactionStrengthVector);
-		} else if (activeAlgorithm.equals(AlgorithmType.COMPOSITE)) {
-			return compositeReactionAlgorithm(reactionStrengthVector);
+		if (activeAlgorithm.equals(AlgorithmType.RANDOM)) {
+			return randomSelectionAlgorithm(v);
+		} else if (activeAlgorithm.equals(AlgorithmType.WEIGHTED)) {
+			return weightedMatchingAlgorithm(v);
 		} else {
-			return singleReactionAlgorithm(reactionStrengthVector);
+			return weightedMatchingAlgorithm(v);
 		}
 	}
 	
-	public static List<MotionUnit> singleReactionAlgorithm(Map<Reaction, Integer> reactionStrengthVector) {
+	public static List<MotionUnit> randomSelectionAlgorithm(ReactionVector reactionVector) {
+		
+		List<MotionUnit> generatedMotions = new ArrayList<MotionUnit>();
+		
+		List<Reaction> selectedReactions = reactionVector.getReactions();
+		if (selectedReactions.size() == 1) {
+			Reaction selectedReaction = selectedReactions.get(0);
+			int reactionId = RIMDataLibrary.getReactionList().indexOf(selectedReaction);
+			List<MotionPart> availableParts = RIMDataLibrary.getActiveRobotType().getMotionParts();
+			for (MotionPart availablePart : availableParts) {
+				List<MotionUnit> availableUnits = availablePart.getMotionUnits();
+				int strengthSum = 0;
+				int[] motionStrengthVector = new int[availableUnits.size()];
+				for (int i = 0; i < availableUnits.size(); i++) {
+					int[] reactionStrengthVector = RIMDataLibrary.getReactionStrengthVector(availableUnits.get(i));
+					strengthSum += reactionStrengthVector[reactionId];
+					motionStrengthVector[i] = strengthSum;
+				}
+				int rand = new Random().nextInt(strengthSum) + 1;
+				for (int i = 0; i < motionStrengthVector.length; i++) {
+					if (rand <= motionStrengthVector[i]) {
+						generatedMotions.add(availableUnits.get(i));
+					}
+				}
+			}
+		} else {
+			throw new RIMException("Number of reaction selected for random algorithm not equal to 1");
+		}
+		
+		return generatedMotions;
+	}
+	
+	public static List<MotionUnit> weightedMatchingAlgorithm(ReactionVector reactionVector) {
+
+		List<MotionUnit> generatedMotions = new ArrayList<MotionUnit>();
+
+		List<Reaction> selectedReactions = reactionVector.getReactions();
+		List<Double> selectedReactionWeights = reactionVector.getWeights();
 		
 		List<MotionPart> availableParts = RIMDataLibrary.getActiveRobotType().getMotionParts();
-		List<MotionUnit> motionGenerated = new ArrayList<MotionUnit>();
-		for (MotionPart p : availableParts) {
-			int chanceSum = 0;
-			List<MotionUnit> availableMotion = p.getMotionUnits();
-			List<MotionUnit> possibleMotion = new ArrayList<MotionUnit>();
-			List<Integer> motionChances = new ArrayList<Integer>();
-			for (MotionUnit u : reaction.getPossibleMotion()) {
-				if (availableMotion.contains(u)) {
-					possibleMotion.add(u);
-					int chance = reaction.getMotionChance(u);
-					chanceSum += chance;
-					motionChances.add(chance);
-				}
-			}
-			int rand = new Random().nextInt(chanceSum) + 1;
-			chanceSum = 0;
-			for (int i = 0; i < motionChances.size(); i++) {
-				chanceSum += motionChances.get(i);
-				if (rand <= chanceSum) {
-					motionGenerated.add(possibleMotion.get(i));
-					break;
-				}
-			}
-		}
 		
-		return motionGenerated;
+		
+		
 	}
 	
-	public static List<MotionUnit> compositeReactionAlgorithm(Map<Reaction, Integer> reactionStrengthVector) {
-
+	private static int vectorDifference(int[] vectorA, int[] vectorB) {
+		
+		int difference = 0;
+		
+		if ((vectorA.length == vectorB.length) && vectorA.length > 0) {
+			for (int i = 0; i < vectorA.length; i++) {
+				difference += Math.abs(vectorA[i] - vectorB[i]);
+			}
+		} else {
+			throw new RIMException("Invalid vector input for comparison");
+		}
+		
+		return difference;
 	}
 	
 }

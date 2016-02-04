@@ -1,11 +1,11 @@
 <!-- Registers any reactions you wish for each application scenario
-to trigger. The chance value specifies its probability weight of
-triggering (against the sum of all chances) -->
+to trigger. The chance value specifies its probability rating (out of 10)
+of triggering. Higher chance means it is more likely to trigger. -->
 
 <scenarioToReactionMapping>
 	
 	<scenario name="MainMenu">	
-		<reaction name="standby" chance="1"></reaction>
+		<reaction name="standby" chance="10"></reaction>
 	</scenario>
 	
 </scenarioToReactionMapping>
