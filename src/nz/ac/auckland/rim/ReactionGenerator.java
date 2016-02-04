@@ -38,7 +38,7 @@ public class ReactionGenerator {
 	 * @param scenarioName name of the triggering scenario
 	 * @return a map of the selected reaction(s) linked to their respective strength value
 	 */
-	public static ReactionVector generateReaction(String scenarioName) {
+	public static List<WeightedReaction> generateReaction(String scenarioName) {
 		
 		Scenario triggerScenario = RIMDataLibrary.getScenario(scenarioName);
 		
@@ -60,7 +60,7 @@ public class ReactionGenerator {
 	 * @param triggerScenario the input scenario
 	 * @return vector of a single reaction with a strength of 10
 	 */
-	private static ReactionVector randomSelectionAlgorithm(Scenario triggerScenario) {
+	private static List<WeightedReaction> randomSelectionAlgorithm(Scenario triggerScenario) {
 		
 		List<Reaction> reactionList = RIMDataLibrary.getReactionList();
 		int[] reactionChanceVector = RIMDataLibrary.getReactionChanceVector(triggerScenario);
@@ -87,11 +87,9 @@ public class ReactionGenerator {
 			}
 		}
 		
-		List<Reaction> chosenReactions = new ArrayList<Reaction>();
-		chosenReactions.add(chosenReaction);
-		List<Double> reactionWeights = new ArrayList<Double>();
-		reactionWeights.add(10.0);
-		return new ReactionVector(chosenReactions, reactionWeights);
+		List<WeightedReaction> chosenReactions = new ArrayList<WeightedReaction>();
+		chosenReactions.add(new WeightedReaction(chosenReaction, 10));
+		return chosenReactions;
 		
 	}
 	
@@ -102,19 +100,19 @@ public class ReactionGenerator {
 	 * @param scenario the input scenario
 	 * @return vector of reactions with their respective strengths
 	 */
-	private static ReactionVector weightedVectorAlgorithm(Scenario triggerScenario) {
+	private static List<WeightedReaction> weightedVectorAlgorithm(Scenario triggerScenario) {
 		
 		List<Reaction> reactionList = RIMDataLibrary.getReactionList();
 		int[] reactionChanceVector = RIMDataLibrary.getReactionChanceVector(triggerScenario);
 		
-		List<Double> reactionWeights = new ArrayList<Double>();
-		
+		List<WeightedReaction> chosenReactions = new ArrayList<WeightedReaction>();
+				
 		for (int i = 0; i < reactionChanceVector.length; i++) {
-			Double strength = (double)reactionChanceVector[i];
-			reactionWeights.add(strength);
+			int strength = reactionChanceVector[i];
+			chosenReactions.add(new WeightedReaction(reactionList.get(i),strength));
 		}
 		
-		return new ReactionVector(reactionList, reactionWeights);
+		return chosenReactions;
 		
 	}
 	

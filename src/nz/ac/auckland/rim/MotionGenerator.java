@@ -37,26 +37,25 @@ public class MotionGenerator {
 	 * strength value 
 	 * @return a list of the selected motion unit(s)
 	 */
-	public static List<MotionUnit> generateMotion(ReactionVector v) {
+	public static List<MotionUnit> generateMotion(List<WeightedReaction> chosenReactions) {
 				
 		// Decide which algorithm to use depending on the configured active algorithm.
 		// Single is the default.
 		if (activeAlgorithm.equals(AlgorithmType.RANDOM)) {
-			return randomSelectionAlgorithm(v);
+			return randomSelectionAlgorithm(chosenReactions);
 		} else if (activeAlgorithm.equals(AlgorithmType.WEIGHTED)) {
-			return weightedMatchingAlgorithm(v);
+			return weightedMatchingAlgorithm(chosenReactions);
 		} else {
-			return weightedMatchingAlgorithm(v);
+			return weightedMatchingAlgorithm(chosenReactions);
 		}
 	}
 	
-	public static List<MotionUnit> randomSelectionAlgorithm(ReactionVector reactionVector) {
+	public static List<MotionUnit> randomSelectionAlgorithm(List<WeightedReaction> chosenReactions) {
 		
 		List<MotionUnit> generatedMotions = new ArrayList<MotionUnit>();
 		
-		List<Reaction> selectedReactions = reactionVector.getReactions();
-		if (selectedReactions.size() == 1) {
-			Reaction selectedReaction = selectedReactions.get(0);
+		if (chosenReactions.size() == 1) {
+			Reaction selectedReaction = chosenReactions.get(0).getReaction();
 			int reactionId = RIMDataLibrary.getReactionList().indexOf(selectedReaction);
 			List<MotionPart> availableParts = RIMDataLibrary.getActiveRobotType().getMotionParts();
 			for (MotionPart availablePart : availableParts) {
@@ -82,17 +81,56 @@ public class MotionGenerator {
 		return generatedMotions;
 	}
 	
-	public static List<MotionUnit> weightedMatchingAlgorithm(ReactionVector reactionVector) {
+	public static List<MotionUnit> weightedMatchingAlgorithm(List<WeightedReaction> chosenReactions) {
 
-		List<MotionUnit> generatedMotions = new ArrayList<MotionUnit>();
-
-		List<Reaction> selectedReactions = reactionVector.getReactions();
-		List<Double> selectedReactionWeights = reactionVector.getWeights();
+		List<MotionUnit> initialMotionCombination = new ArrayList<MotionUnit>();
+		
+		int[] reactionWeights = new int[chosenReactions.size()];
+		for (int i = 0; i < chosenReactions.size(); i++) {
+			reactionWeights[i] = chosenReactions.get(i).getWeight();
+		}
 		
 		List<MotionPart> availableParts = RIMDataLibrary.getActiveRobotType().getMotionParts();
+		for (MotionPart availablePart : availableParts) {
+			int minDifference = Integer.MAX_VALUE;
+			List<MotionUnit> availableUnits = availablePart.getMotionUnits();
+			MotionUnit bestMatchMotion = null;
+			for (int i = 0; i < availableUnits.size(); i++) {
+				int weightDifference = vectorDifference(reactionWeights, 
+						RIMDataLibrary.getReactionStrengthVector(availableUnits.get(i)));
+				if (weightDifference < minDifference) {
+					minDifference = weightDifference;
+					bestMatchMotion = availableUnits.get(i);
+				}
+			}
+			initialMotionCombination.add(bestMatchMotion);
+		}
 		
+		double optimalWeightError = averageWeightError(initialMotionCombination, reactionWeights);
+		List<MotionUnit> optimalMotionCombination = initialMotionCombination;
 		
+		double temperature = 10.0;
+		double temperatureReductionRate = 0.995;
+		double terminationTemperature = 0.1;
 		
+		while (temperature > terminationTemperature) {
+			List<MotionUnit> candidateMotionCombination = selectRandomMotions(availableParts);
+			double candidateWeightError = averageWeightError(candidateMotionCombination, reactionWeights);
+			if (candidateWeightError < optimalWeightError) {
+				optimalWeightError = candidateWeightError;
+				optimalMotionCombination = candidateMotionCombination;
+			} else {
+				double acceptanceProbability = Math.exp((optimalWeightError - candidateWeightError) / temperature);
+				double rand = new Random().nextDouble();
+				if (rand < acceptanceProbability) {
+					optimalWeightError = candidateWeightError;
+					optimalMotionCombination = candidateMotionCombination;
+				}
+			}
+			temperature = temperature * temperatureReductionRate;
+		}
+		
+		return optimalMotionCombination;
 	}
 	
 	private static int vectorDifference(int[] vectorA, int[] vectorB) {
@@ -108,6 +146,27 @@ public class MotionGenerator {
 		}
 		
 		return difference;
+	}
+	
+	private static double averageWeightError(List<MotionUnit> motionCombination, int[] reactionWeights) {
+		
+		double sumWeightError = 0.0;
+		for (MotionUnit u : motionCombination) {
+			sumWeightError += vectorDifference(RIMDataLibrary.getReactionStrengthVector(u), reactionWeights);
+		}
+		double averageWeightError = sumWeightError / motionCombination.size();
+		return averageWeightError;
+	}
+	
+	private static List<MotionUnit> selectRandomMotions(List<MotionPart> availableParts) {
+		
+		List<MotionUnit> selectedMotions = new ArrayList<MotionUnit>();
+		for (MotionPart availablePart : availableParts) {
+			List<MotionUnit> availableUnits = availablePart.getMotionUnits();
+			int rand = new Random().nextInt(availableUnits.size());
+			selectedMotions.add(availableUnits.get(rand));
+		}
+		return selectedMotions;
 	}
 	
 }
