@@ -88,20 +88,22 @@ public class RIMDataLibrary {
 			MotionPart p = getMotionPart(motionPartName);
 			NodeList motionUnitNodes = motionPartNode.getChildNodes();
 			for (int j = 0; j < motionUnitNodes.getLength(); j++) {
-				Element motionUnitNode = (Element)motionUnitNodes.item(j);
-				if (motionUnitNode.getTagName().equals("motionUnit")) {
-					String motionUnitName = motionUnitNode.getAttribute("name");
-					MotionUnit u = getMotionUnit(motionUnitName);
-					p.registerMotionUnit(u);
-					u.registerActuator(p);
+				if (motionUnitNodes.item(j).getNodeType() == Node.ELEMENT_NODE) {
+					Element motionUnitNode = (Element)motionUnitNodes.item(j);
+					if (motionUnitNode.getTagName().equals("motionUnit")) {
+						String motionUnitName = motionUnitNode.getAttribute("name");
+						MotionUnit u = getMotionUnit(motionUnitName);
+						p.registerMotionUnit(u);
+						u.registerActuator(p);
+					}
 				}
 			}
 		}
 		
 		// register robot types
 		_robotTypes = new ArrayList<RobotType>();
-		Document robotTypeListDoc = XmlParser.parseToDocument("config/robotType_list.xml");
-		NodeList robotTypeListNodes = motionPartAndUnitListDoc.getElementsByTagName("robotType");
+		Document robotTypeListDoc = XmlParser.parseToDocument("config/robot_type_list.xml");
+		NodeList robotTypeListNodes = robotTypeListDoc.getElementsByTagName("robotType");
 		for (int i = 0; i < robotTypeListNodes.getLength(); i++) {
 			String robotTypeName = ((Element)robotTypeListNodes.item(i)).getAttribute("name");
 			_robotTypes.add(new RobotType(robotTypeName));
@@ -125,11 +127,13 @@ public class RIMDataLibrary {
 			RobotType t = getRobotType(robotTypeName);
 			NodeList mappedMotionPartNodes = mappedRobotTypeNode.getChildNodes();
 			for (int j = 0; j < mappedMotionPartNodes.getLength(); j++) {
-				Element mappedMotionPartNode = (Element)mappedMotionPartNodes.item(j);
-				if (mappedMotionPartNode.getTagName().equals("motionPart")) {
-					String motionPartName = mappedMotionPartNode.getAttribute("name");
-					MotionPart p = getMotionPart(motionPartName);
-					t.registerMotionPart(p);
+				if (mappedMotionPartNodes.item(j).getNodeType() == Node.ELEMENT_NODE) {
+					Element mappedMotionPartNode = (Element)mappedMotionPartNodes.item(j);
+					if (mappedMotionPartNode.getTagName().equals("motionPart")) {
+						String motionPartName = mappedMotionPartNode.getAttribute("name");
+						MotionPart p = getMotionPart(motionPartName);
+						t.registerMotionPart(p);
+					}
 				}
 			}
 		}
@@ -144,16 +148,18 @@ public class RIMDataLibrary {
 			Scenario mappedScenario = getScenario(scenarioName);
 			NodeList mappedReactionNodes = mappedScenarioNodes.item(i).getChildNodes();
 			for (int j = 0; j < mappedReactionNodes.getLength(); j++) {
-				Element mappedReactionNode = ((Element)mappedReactionNodes.item(j));
-				if (mappedReactionNode.getTagName().equals("reaction")) {
-					String reactionName = mappedReactionNode.getAttribute("name");
-					Reaction mappedReaction = getReaction(reactionName);
-					int reactionChance = Integer.parseInt(mappedReactionNode.getAttribute("chance"));
-					/* put the chance value in the mapping matrix, its position in respect to
-					 * the indices of the scenario and reaction lists */
-					int scenarioId = _scenarios.indexOf(mappedScenario);
-					int reactionId = _reactions.indexOf(mappedReaction);
-					_scenarioToReactionMapping[scenarioId][reactionId] = reactionChance;
+				if (mappedReactionNodes.item(j).getNodeType() == Node.ELEMENT_NODE) {
+					Element mappedReactionNode = ((Element)mappedReactionNodes.item(j));
+					if (mappedReactionNode.getTagName().equals("reaction")) {
+						String reactionName = mappedReactionNode.getAttribute("name");
+						Reaction mappedReaction = getReaction(reactionName);
+						int reactionChance = Integer.parseInt(mappedReactionNode.getAttribute("chance"));
+						/* put the chance value in the mapping matrix, its position in respect to
+						 * the indices of the scenario and reaction lists */
+						int scenarioId = _scenarios.indexOf(mappedScenario);
+						int reactionId = _reactions.indexOf(mappedReaction);
+						_scenarioToReactionMapping[scenarioId][reactionId] = reactionChance;
+					}
 				}
 			}
 		}
@@ -168,14 +174,16 @@ public class RIMDataLibrary {
 			MotionUnit mappedMotionUnit = getMotionUnit(motionUnitName);
 			NodeList mappedReactionNodes = mappedMotionUnitNodes.item(i).getChildNodes();
 			for (int j = 0; j < mappedReactionNodes.getLength(); j++) {
-				Element mappedReactionNode = ((Element)mappedReactionNodes.item(j));
-				if (mappedReactionNode.getTagName().equals("reaction")) {
-					String reactionName = mappedReactionNode.getAttribute("name");
-					Reaction mappedReaction = getReaction(reactionName);
-					int reactionStrength = Integer.parseInt(mappedReactionNode.getAttribute("strength"));
-					int motionUnitId = _motionUnits.indexOf(mappedMotionUnit);
-					int reactionId = _reactions.indexOf(mappedReaction);
-					_motionUnitToReactionMapping[motionUnitId][reactionId] = reactionStrength;
+				if (mappedReactionNodes.item(j).getNodeType() == Node.ELEMENT_NODE) {
+					Element mappedReactionNode = ((Element)mappedReactionNodes.item(j));
+					if (mappedReactionNode.getTagName().equals("reaction")) {
+						String reactionName = mappedReactionNode.getAttribute("name");
+						Reaction mappedReaction = getReaction(reactionName);
+						int reactionStrength = Integer.parseInt(mappedReactionNode.getAttribute("strength"));
+						int motionUnitId = _motionUnits.indexOf(mappedMotionUnit);
+						int reactionId = _reactions.indexOf(mappedReaction);
+						_motionUnitToReactionMapping[motionUnitId][reactionId] = reactionStrength;
+					}
 				}
 			}
 		}

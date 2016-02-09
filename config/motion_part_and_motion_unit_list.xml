@@ -13,11 +13,11 @@ all motion parts. -->
 	 	<motionUnit name="armsBothDrop"></motionUnit>
 	 </motionPart>
 	 <motionPart name="LED">
-	 	<motionUnit name="showHappiness"></motionUnit>
-	 	<motionUnit name="showSadness"></motionUnit>
-	 	<motionUnit name="showAlert"></motionUnit>
-	 	<motionUnit name="showFastProcessing"></motionUnit>
-	 	<motionUnit name="showSlowProcessing"></motionUnit>
+	 	<motionUnit name="LEDshowHappiness"></motionUnit>
+	 	<motionUnit name="LEDshowSadness"></motionUnit>
+	 	<motionUnit name="LEDshowAlert"></motionUnit>
+	 	<motionUnit name="LEDshowFastProcessing"></motionUnit>
+	 	<motionUnit name="LEDshowSlowProcessing"></motionUnit>
 	 </motionPart>
 	 <motionPart name="speech">
 	 	<motionUnit name="speechSayHello"></motionUnit>

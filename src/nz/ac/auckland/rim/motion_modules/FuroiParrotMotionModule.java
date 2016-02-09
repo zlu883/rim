@@ -1,5 +1,7 @@
 package nz.ac.auckland.rim.motion_modules;
 
+import java.util.List;
+
 import nz.ac.auckland.rim.data.MotionUnit;
 import nz.ac.auckland.rim.data.RobotType;
 
@@ -28,7 +30,13 @@ public class FuroiParrotMotionModule implements RobotMotionModule {
 	}
 
 	@Override
-	public void executeMotion(MotionUnit u) {
+	public void executeMotions(List<MotionUnit> motions) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void reset() {
 		// TODO Auto-generated method stub
 		
 	}

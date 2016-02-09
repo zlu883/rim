@@ -4,8 +4,8 @@ of triggering. Higher chance means it is more likely to trigger. -->
 
 <scenarioToReactionMapping>
 	
-	<scenario name="MainMenu">	
-		<reaction name="standby" chance="10"></reaction>
+	<scenario name="mainMenu">	
+		<reaction name="wait" chance="10"></reaction>
 	</scenario>
 	
 </scenarioToReactionMapping>

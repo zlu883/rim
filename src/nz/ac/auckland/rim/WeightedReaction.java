@@ -7,7 +7,7 @@ import nz.ac.auckland.rim.data.Reaction;
 /**
  * A structure consisting of a reaction with its associated weight value.
  * 
- * @author zlu883
+ * @author Jonny Lu
  *
  */
 public class WeightedReaction {

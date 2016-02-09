@@ -7,7 +7,10 @@
 	<!-- IP address and port of the RM server which takes RIM output commands, depends on RM configuration -->
 	<RMserverAddress>ws://localhost:10000</RMserverAddress>
 
-	<!-- The interaction generation scheme, either SINGLE or VECTOR -->
-	<generationScheme>VECTOR</generationScheme>
+	<!-- The reaction generation scheme, either RANDOM or WEIGHTED -->
+	<reactionGenerationScheme>WEIGHTED</reactionGenerationScheme>
+
+	<!-- The motion generation scheme, either RANDOM or WEIGHTED -->
+	<motionGenerationScheme>WEIGHTED</motionGenerationScheme>
 	
 </generalConfig>

@@ -8,8 +8,8 @@ import java.net.UnknownHostException;
 
 public class WebSocketManager {
 
-	public static final String RobotManagerURI = "ws://localhost:33333";
-	public static final InetSocketAddress RIMServerPort = new InetSocketAddress(33336);
+	public static String RobotManagerURI = null;
+	public static InetSocketAddress RIMServerPort = null;
 	
 	private static RIMWebSocketClient _RIMclient;
 	private static RIMWebSocketServer _RIMserver;
