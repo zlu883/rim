@@ -31,7 +31,8 @@ public interface RobotMotionModule {
 	public void executeMotions(List<MotionUnit> motions);
 	
 	/**
-	 * Terminates all motions in running.
+	 * Terminates all motions in running, and send commands to the robot to return it
+	 * to a neutral resting state.
 	 */
 	public void reset();
 	

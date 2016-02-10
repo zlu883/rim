@@ -6,6 +6,16 @@ of triggering. Higher chance means it is more likely to trigger. -->
 	
 	<scenario name="mainMenu">	
 		<reaction name="wait" chance="10"></reaction>
+				<reaction name="busy" chance="10"></reaction>
+				<reaction name="compliment" chance="9"></reaction>
+		
+	</scenario>
+	
+	<scenario name="mainMenu2">	
+		<reaction name="wait" chance="10"></reaction>
+				<reaction name="busy" chance="10"></reaction>
+				<reaction name="compliment" chance="9"></reaction>
+		
 	</scenario>
 	
 </scenarioToReactionMapping>

@@ -4,11 +4,168 @@ Higher rating suggests the motion better reflects the reaction. -->
 
 <!-- All reactions must be registered in reaction_list.xml -->
 <!-- All motion units must be registered in motion_part_and_motion_unit_list.xml -->
+<!-- Avoid duplicate entries -->
 
 <motionUnitToReactionMapping>
 
 	<motionUnit name="armsBothSwing">
+		<reaction name="greet" strength="3"></reaction>
+		<reaction name="busy" strength="8"></reaction>
+		<reaction name="wait" strength="1"></reaction>
+		<reaction name="sleep" strength="0"></reaction>
+		<reaction name="compliment" strength="3"></reaction>
+		<reaction name="complain" strength="3"></reaction>
+		<reaction name="dance" strength="10"></reaction>
+	</motionUnit>
+	
+	<motionUnit name="armsBothRaise">
+		<reaction name="greet" strength="8"></reaction>
+		<reaction name="busy" strength="3"></reaction>
+		<reaction name="wait" strength="3"></reaction>
+		<reaction name="sleep" strength="0"></reaction>
+		<reaction name="compliment" strength="7"></reaction>
+		<reaction name="complain" strength="7"></reaction>
+		<reaction name="dance" strength="6"></reaction>
+	</motionUnit>
+	
+	<motionUnit name="armsBothDrop">
+		<reaction name="greet" strength="1"></reaction>
+		<reaction name="busy" strength="1"></reaction>
+		<reaction name="wait" strength="9"></reaction>
+		<reaction name="sleep" strength="10"></reaction>
+		<reaction name="compliment" strength="2"></reaction>
+		<reaction name="complain" strength="2"></reaction>
+		<reaction name="dance" strength="0"></reaction>
+	</motionUnit>
+	 	
+	<motionUnit name="LEDshowHappiness">
+	 	<reaction name="greet" strength="8"></reaction>
+		<reaction name="busy" strength="2"></reaction>
+		<reaction name="wait" strength="3"></reaction>
+		<reaction name="sleep" strength="2"></reaction>
+		<reaction name="compliment" strength="10"></reaction>
+		<reaction name="complain" strength="0"></reaction>
+		<reaction name="dance" strength="8"></reaction>
+	</motionUnit>
+	
+	<motionUnit name="LEDshowSadness">
+		<reaction name="greet" strength="1"></reaction>
+		<reaction name="busy" strength="2"></reaction>
+		<reaction name="wait" strength="3"></reaction>
+		<reaction name="sleep" strength="2"></reaction>
+		<reaction name="compliment" strength="0"></reaction>
+		<reaction name="complain" strength="7"></reaction>
+		<reaction name="dance" strength="0"></reaction>
+	</motionUnit>
+	
+	<motionUnit name="LEDshowAlert">
+		<reaction name="greet" strength="3"></reaction>
+		<reaction name="busy" strength="5"></reaction>
+		<reaction name="wait" strength="0"></reaction>
+		<reaction name="sleep" strength="0"></reaction>
+		<reaction name="compliment" strength="5"></reaction>
+		<reaction name="complain" strength="7"></reaction>
+		<reaction name="dance" strength="0"></reaction>
+	</motionUnit>
+	
+	<motionUnit name="LEDshowFastProcessing">
+		<reaction name="greet" strength="2"></reaction>
+		<reaction name="busy" strength="10"></reaction>
+		<reaction name="wait" strength="0"></reaction>
+		<reaction name="sleep" strength="0"></reaction>
+		<reaction name="compliment" strength="0"></reaction>
+		<reaction name="complain" strength="0"></reaction>
+		<reaction name="dance" strength="5"></reaction>
+	</motionUnit>
+	 
+	<motionUnit name="LEDshowSlowProcessing">
+		<reaction name="greet" strength="2"></reaction>
+		<reaction name="busy" strength="0"></reaction>
+		<reaction name="wait" strength="6"></reaction>
+		<reaction name="sleep" strength="10"></reaction>
+		<reaction name="compliment" strength="0"></reaction>
+		<reaction name="complain" strength="0"></reaction>
+		<reaction name="dance" strength="0"></reaction>
+	</motionUnit>
+	
+	<motionUnit name="LEDoff">
+		<reaction name="greet" strength="0"></reaction>
+		<reaction name="busy" strength="0"></reaction>
+		<reaction name="wait" strength="5"></reaction>
+		<reaction name="sleep" strength="5"></reaction>
+		<reaction name="compliment" strength="0"></reaction>
+		<reaction name="complain" strength="0"></reaction>
+		<reaction name="dance" strength="0"></reaction>
+	</motionUnit>
+	
+	<motionUnit name="speechSayHello">
+		<reaction name="greet" strength="10"></reaction>
+		<reaction name="busy" strength="0"></reaction>
+		<reaction name="wait" strength="2"></reaction>
+		<reaction name="sleep" strength="0"></reaction>
+		<reaction name="compliment" strength="0"></reaction>
+		<reaction name="complain" strength="0"></reaction>
+		<reaction name="dance" strength="0"></reaction>
+	</motionUnit>
+	
+	<motionUnit name="speechSayGoodWork">
+		<reaction name="greet" strength="0"></reaction>
+		<reaction name="busy" strength="0"></reaction>
+		<reaction name="wait" strength="0"></reaction>
+		<reaction name="sleep" strength="0"></reaction>
+		<reaction name="compliment" strength="10"></reaction>
+		<reaction name="complain" strength="0"></reaction>
+		<reaction name="dance" strength="0"></reaction>
+	</motionUnit>
+	
+	<motionUnit name="speechSayCanDoBetter">
+		<reaction name="greet" strength="0"></reaction>
+		<reaction name="busy" strength="0"></reaction>
+		<reaction name="wait" strength="0"></reaction>
+		<reaction name="sleep" strength="0"></reaction>
+		<reaction name="compliment" strength="0"></reaction>
+		<reaction name="complain" strength="10"></reaction>
+		<reaction name="dance" strength="0"></reaction>
+	</motionUnit>
+	
+	<motionUnit name="speechSayReady">
+		<reaction name="greet" strength="5"></reaction>
+		<reaction name="busy" strength="0"></reaction>
+		<reaction name="wait" strength="5"></reaction>
+		<reaction name="sleep" strength="0"></reaction>
+		<reaction name="compliment" strength="0"></reaction>
+		<reaction name="complain" strength="0"></reaction>
+		<reaction name="dance" strength="0"></reaction>
+	</motionUnit>
+	
+	<motionUnit name="speechSayBusy">
+		<reaction name="greet" strength="0"></reaction>
 		<reaction name="busy" strength="9"></reaction>
+		<reaction name="wait" strength="0"></reaction>
+		<reaction name="sleep" strength="0"></reaction>
+		<reaction name="compliment" strength="0"></reaction>
+		<reaction name="complain" strength="0"></reaction>
+		<reaction name="dance" strength="0"></reaction>
+	</motionUnit>
+	 	
+	<motionUnit name="speechSayPleaseWait">
+		<reaction name="greet" strength="0"></reaction>
+		<reaction name="busy" strength="9"></reaction>
+		<reaction name="wait" strength="0"></reaction>
+		<reaction name="sleep" strength="0"></reaction>
+		<reaction name="compliment" strength="0"></reaction>
+		<reaction name="complain" strength="0"></reaction>
+		<reaction name="dance" strength="0"></reaction>
+	</motionUnit>
+	
+	<motionUnit name="speechSayNothing">
+		<reaction name="greet" strength="1"></reaction>
+		<reaction name="busy" strength="3"></reaction>
+		<reaction name="wait" strength="5"></reaction>
+		<reaction name="sleep" strength="10"></reaction>
+		<reaction name="compliment" strength="1"></reaction>
+		<reaction name="complain" strength="1"></reaction>
+		<reaction name="dance" strength="3"></reaction>
 	</motionUnit>
 	
 </motionUnitToReactionMapping>

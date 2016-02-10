@@ -50,6 +50,11 @@ public class MotionGenerator {
 		}
 	}
 	
+	/**
+	 * UNUSED
+	 * @param chosenReactions
+	 * @return
+	 */
 	public static List<MotionUnit> randomSelectionAlgorithm(List<WeightedReaction> chosenReactions) {
 		
 		List<MotionUnit> generatedMotions = new ArrayList<MotionUnit>();
@@ -81,15 +86,29 @@ public class MotionGenerator {
 		return generatedMotions;
 	}
 	
+	/**
+	 * Selects a set of motion units by comparing their reaction-representation vector with the
+	 * input reaction-weight vector. Attempts to find the motion unit combination with the minimum
+	 * difference when comparing the average of their combined vectors and the input vector.
+	 * Uses the simulated annealing algorithm as presented in the paper "A Behavior Combination 
+	 * Generating Method for Reflecting Emotional Probabilities using Simulated Annealing Algorithm"
+	 * by Ho Seok Ahn et. al.
+	 * 
+	 * @param chosenReactions list of selected reactions to portray with their respective weight
+	 * @return list of chosen motion units, one in each avilable motion part
+	 */
 	public static List<MotionUnit> weightedMatchingAlgorithm(List<WeightedReaction> chosenReactions) {
-
-		List<MotionUnit> initialMotionCombination = new ArrayList<MotionUnit>();
 		
+		// Put the weights of the input vector into a separate array
 		int[] reactionWeights = new int[chosenReactions.size()];
 		for (int i = 0; i < chosenReactions.size(); i++) {
 			reactionWeights[i] = chosenReactions.get(i).getWeight();
 		}
 		
+		// Decides on an initial motion combination by choosing one motion in each
+		// available motion part that has the minimum reaction-representation difference with
+		// the input vector.
+		List<MotionUnit> initialMotionCombination = new ArrayList<MotionUnit>();
 		List<MotionPart> availableParts = RIMDataLibrary.getActiveRobotType().getMotionParts();
 		for (MotionPart availablePart : availableParts) {
 			int minDifference = Integer.MAX_VALUE;
@@ -106,13 +125,19 @@ public class MotionGenerator {
 			initialMotionCombination.add(bestMatchMotion);
 		}
 		
+		// Uses the simulated annealing algorithm to compare random candidate combinations
+		// with the existing one. The better one is always chosen, but a worse one is
+		// sometimes chosen under a probability that reduces as the temperature reduces.
 		double optimalWeightError = averageWeightError(initialMotionCombination, reactionWeights);
 		List<MotionUnit> optimalMotionCombination = initialMotionCombination;
 		
-		double temperature = 10.0;
+		double temperature = 10.0; // initial temperature
 		double temperatureReductionRate = 0.995;
 		double terminationTemperature = 0.1;
 		
+		// Runs the simulated annealing algorithm until the temperature drops to the
+		// termination temperature. The temperature reduces by the reduction rate
+		// in every cycle.
 		while (temperature > terminationTemperature) {
 			List<MotionUnit> candidateMotionCombination = selectRandomMotions(availableParts);
 			double candidateWeightError = averageWeightError(candidateMotionCombination, reactionWeights);
@@ -120,6 +145,8 @@ public class MotionGenerator {
 				optimalWeightError = candidateWeightError;
 				optimalMotionCombination = candidateMotionCombination;
 			} else {
+				// The probability of accepting a worse candidate is given by the following
+				// formula
 				double acceptanceProbability = Math.exp((optimalWeightError - candidateWeightError) / temperature);
 				double rand = new Random().nextDouble();
 				if (rand < acceptanceProbability) {
@@ -130,9 +157,16 @@ public class MotionGenerator {
 			temperature = temperature * temperatureReductionRate;
 		}
 		
+		// Returns the selected motion combination at the end of the algorithm.
 		return optimalMotionCombination;
 	}
 	
+	/**
+	 * Calculates the difference between two integer vectors.
+	 * @param vectorA
+	 * @param vectorB
+	 * @return the sum of all components in the resulting vector
+	 */
 	private static int vectorDifference(int[] vectorA, int[] vectorB) {
 		
 		int difference = 0;
@@ -148,6 +182,13 @@ public class MotionGenerator {
 		return difference;
 	}
 	
+	/**
+	 * Calculates the difference between the average of multiple
+	 * reaction-representation vectors and an reaction-weight vector.
+	 * @param motionCombination set of motions to obtain reaction-representation vectors from
+	 * @param reactionWeights an array of integer weights corresponding to reactions
+	 * @return the sum of all components in the resulting vector
+	 */
 	private static double averageWeightError(List<MotionUnit> motionCombination, int[] reactionWeights) {
 		
 		double sumWeightError = 0.0;
@@ -158,6 +199,11 @@ public class MotionGenerator {
 		return averageWeightError;
 	}
 	
+	/**
+	 * Randomly pick one motion unit from each available motion part.
+	 * @param availableParts list of available motion parts
+	 * @return list of selected motion units
+	 */
 	private static List<MotionUnit> selectRandomMotions(List<MotionPart> availableParts) {
 		
 		List<MotionUnit> selectedMotions = new ArrayList<MotionUnit>();

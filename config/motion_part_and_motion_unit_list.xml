@@ -18,6 +18,7 @@ all motion parts. -->
 	 	<motionUnit name="LEDshowAlert"></motionUnit>
 	 	<motionUnit name="LEDshowFastProcessing"></motionUnit>
 	 	<motionUnit name="LEDshowSlowProcessing"></motionUnit>
+	 	<motionUnit name="LEDoff"></motionUnit>	 	
 	 </motionPart>
 	 <motionPart name="speech">
 	 	<motionUnit name="speechSayHello"></motionUnit>
@@ -26,6 +27,7 @@ all motion parts. -->
 	 	<motionUnit name="speechSayReady"></motionUnit>
 	 	<motionUnit name="speechSayBusy"></motionUnit>
 	 	<motionUnit name="speechSayPleaseWait"></motionUnit>
+	 	<motionUnit name="speechSayNothing"></motionUnit>
 	 </motionPart>
 	 
 </motionPartAndMotionUnitList>

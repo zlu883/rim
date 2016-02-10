@@ -3,5 +3,7 @@
 <scenarioList>
 
 	<scenario name="mainMenu"></scenario>
+	<scenario name="mainMenu1"></scenario>
+	<scenario name="mainMenu2"></scenario>
 
 </scenarioList>

@@ -54,11 +54,7 @@ public class ReactionGenerator {
 	}
 	
 	/**
-	 * Generates a single reaction for the scenario by randomly selecting one from its list
-	 * of possible reactions, based on their chance values.
-	 * 
-	 * @param triggerScenario the input scenario
-	 * @return vector of a single reaction with a strength of 10
+	 * UNUSED
 	 */
 	private static List<WeightedReaction> randomSelectionAlgorithm(Scenario triggerScenario) {
 		

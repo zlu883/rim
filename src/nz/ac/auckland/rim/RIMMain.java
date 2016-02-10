@@ -7,8 +7,12 @@ import java.util.List;
 
 import org.w3c.dom.Document;
 
+import nz.ac.auckland.rim.data.MotionPart;
 import nz.ac.auckland.rim.data.MotionUnit;
 import nz.ac.auckland.rim.data.RIMDataLibrary;
+import nz.ac.auckland.rim.data.Reaction;
+import nz.ac.auckland.rim.data.RobotType;
+import nz.ac.auckland.rim.data.Scenario;
 import nz.ac.auckland.rim.data.XmlParser;
 import nz.ac.auckland.rim.motion_modules.FuroiHomeMotionModule;
 import nz.ac.auckland.rim.motion_modules.FuroiParrotMotionModule;
@@ -37,23 +41,29 @@ public class RIMMain {
 		String RMServerAddress = RIMConfigDoc.getElementsByTagName("RMserverAddress").item(0).getTextContent();
 		WebSocketManager.RobotManagerURI = RMServerAddress;
 		
-		String RIMServerPort = RIMConfigDoc.getElementsByTagName("RMserverAddress").item(0).getTextContent();
+		String RIMServerPort = RIMConfigDoc.getElementsByTagName("RIMserverPortNumber").item(0).getTextContent();
 		WebSocketManager.RIMServerPort = new InetSocketAddress(Integer.parseInt(RIMServerPort));
 
 		// Initialize components
 		RIMDataLibrary.init();
 		
-		try {
+		/*try {
 			WebSocketManager.init();
 		} catch (UnknownHostException | URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		 
 		// REGISTER ROBOT MOTION MODULES HERE
 		
 		RIMDataLibrary.getRobotType("FuroiHome").registerMotionModule(FuroiHomeMotionModule.getInstance());
 		RIMDataLibrary.getRobotType("FuroiParrot").registerMotionModule(FuroiParrotMotionModule.getInstance());
+		
+		List<WeightedReaction> generatedReactions = ReactionGenerator.generateReaction("mainMenu");
+		List<MotionUnit> generatedMotions = MotionGenerator.generateMotion(generatedReactions);
+		for (MotionUnit m : generatedMotions) {
+			System.out.println(m.getName());
+		}
 		
 	}
 	
